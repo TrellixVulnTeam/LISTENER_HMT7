@@ -1,0 +1,17 @@
+{
+  "name": "listener",
+  "version": "1.0.0",
+  "description": "chatscrape",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Tyler Harper",
+  "license": "ISC",
+  "dependencies": {
+    "objects-to-csv": "^1.3.6",
+    "osa-imessage": "github:tharper14/osa-imessage-socialScrape",
+    "sqlite3": "^5.0.8"
+  },
+  "devDependencies": {}
+}
