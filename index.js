@@ -1,27 +1,13 @@
 const imessage = require('osa-imessage')
 const fs = require('fs')
 
-
 //this only works using node version v8.17.0 on the socialScrape Computer
 
-
-
-
-// const createCsvWriter = require('csv-writer').createObjectCsvWriter;
-// const csvWriter = createCsvWriter({
-//     path: csvPath,
-//     header: [
-//         {id: 'date', title: 'DATE GATHERED'},
-//         {id: 'link', title: 'LINK'},
-//         {id: 'handle', title: 'CLIP GETTER'}
-//     ]
-// });
-
 // const csvPath = '/Users/socialscrape/Social Wake Dropbox/Tylers Tests/masterLog.csv'
-const linkPath = '/Users/socialscrape/Social Wake Dropbox/Tylers Tests/chatScrape.txt'
-const chatLogPath = '/Users/socialscrape/Social Wake Dropbox/Tylers Tests/chatLog.txt'
-const testLogPath ='/Users/socialscrape/Social Wake Dropbox/Tylers Tests/testLog.txt'
-let tempDate =''
+const linkPath = '/Users/socialscrape/Social Wake Dropbox/_socialScrape/logs/chatScrapeLinks.txt'
+const chatLogPath = '/Users/socialscrape/Social Wake Dropbox/_socialScrape/logs/chatLog.txt'
+const testLogPath ='/Users/socialscrape/Social Wake Dropbox/_socialScrape/logs/testLog.txt'
+
 var logger = fs.createWriteStream('liveChat.txt', {
     flags: 'a' // 'a' means appending (old data will be preserved)
   })
@@ -50,22 +36,13 @@ var writeTestLog = (line) => TestLogger.write(`\n${line}`);
 imessage.listen().on("message", (msg) => {
     console.log(msg)
     
-    // console.log(msg.date)
-    // const records = [
-    //     {date: msg.date,  link: msg.text, handle: msg.handle},
-    // ];
-    
-    // csvWriter.writeRecords(records)       // returns a promise
-    // .then(() => {
-    //     console.log('...Done');
-    // });
-    
     writeLine(`${msg.date}, ${msg.text}, ${msg.handle}`);
 
-    if (msg.group !== null && msg.group.indexOf("chat652293730519823796") !== -1) {
+    if (msg.group !== null && msg.group.indexOf('chat652293730519823796') !== -1) {
+    //if (msg.group !== null && msg.group.indexOf("chat674751436891709568") !== -1) {
 
-        if (msg.text !== null && msg.text.indexOf("tiktok.com") !== -1 && !chats[i].text.includes('Disliked')) {
-           
+        if (msg.text !== null && msg.text.indexOf("tiktok.com") !== -1 /*&& !msg.text.includes('Disliked')*/)
+        {
             writeChatLog(`${msg.date.toLocaleString('en-US', {
                 timeZone: 'America/New_York',
                 year: "2-digit",
@@ -73,9 +50,23 @@ imessage.listen().on("message", (msg) => {
                 day: '2-digit',
                 hour: '2-digit',
                 minute: '2-digit',
-                second: '2-digit',
-              })}, ${msg.text}, ${msg.handle}`);
-            writeLink(msg.text);
+                second: '2-digit', })}, ${msg.text}, ${msg.handle}`);
+
+          let time = new Date();
+          try {
+            fs.utimesSync(chatLogPath, time, time);  //https://remarkablemark.org/blog/2017/12/17/touch-file-nodejs/
+          } catch (err) {
+            fs.closeSync(fs.openSync(chatLogPath, 'w'));
+          }
+
+
+          writeLink(msg.text);
+          let timeLink = new Date();
+          try {
+            fs.utimesSync(linkPath, timeLink, timeLink);  //https://remarkablemark.org/blog/2017/12/17/touch-file-nodejs/
+          } catch (err) {
+            fs.closeSync(fs.openSync(linkPath, 'w'));
+          }
         }
 
     }
@@ -97,9 +88,17 @@ imessage.listen().on("message", (msg) => {
             minute: '2-digit',
             second: '2-digit',
           })}, ${msg.text}, ${msg.handle}`);
+
+          const time = new Date();
+          try {
+            fs.utimesSync(testLogPath, time, time);  //https://remarkablemark.org/blog/2017/12/17/touch-file-nodejs/
+          } catch (err) {
+            fs.closeSync(fs.openSync(testLogPath, 'w'));
+          }
     }
         
   });
+
 
 
 
