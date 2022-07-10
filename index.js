@@ -3,10 +3,13 @@ const fs = require('fs')
 
 //this only works using node version v8.17.0 on the socialScrape Computer
 
-// const csvPath = '/Users/socialscrape/Social Wake Dropbox/Tylers Tests/masterLog.csv'
-const linkPath = '/Users/socialscrape/Social Wake Dropbox/_socialScrape/logs/chatScrapeLinks.txt'
-const chatLogPath = '/Users/socialscrape/Social Wake Dropbox/_socialScrape/logs/chatLog.txt'
-const testLogPath ='/Users/socialscrape/Social Wake Dropbox/_socialScrape/logs/testLog.txt'
+const yourUsername = 'tylerharper';
+const dropBoxFolder = '_socialScrape'
+const masterLogPath =  `/Users/${yourUsername}/Social Wake Dropbox/${dropBoxFolder}/logs/masterCompletedLog.txt`
+const linkPath =  `/Users/${yourUsername}/Social Wake Dropbox/${dropBoxFolder}/logs/chatScrapeLinks.txt`
+const testLogPath =  `/Users/${yourUsername}/Social Wake Dropbox/${dropBoxFolder}/logs/testLog.txt'
+const chatLogPath=  `/Users/${yourUsername}/Social Wake Dropbox/${dropBoxFolder}/logs/chatLog.txt'
+
 
 var logger = fs.createWriteStream('liveChat.txt', {
     flags: 'a' // 'a' means appending (old data will be preserved)
