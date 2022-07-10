@@ -7,8 +7,8 @@ const yourUsername = 'tylerharper';
 const dropBoxFolder = '_socialScrape'
 const masterLogPath =  `/Users/${yourUsername}/Social Wake Dropbox/${dropBoxFolder}/logs/masterCompletedLog.txt`
 const linkPath =  `/Users/${yourUsername}/Social Wake Dropbox/${dropBoxFolder}/logs/chatScrapeLinks.txt`
-const testLogPath =  `/Users/${yourUsername}/Social Wake Dropbox/${dropBoxFolder}/logs/testLog.txt'
-const chatLogPath=  `/Users/${yourUsername}/Social Wake Dropbox/${dropBoxFolder}/logs/chatLog.txt'
+const testLogPath =  `/Users/${yourUsername}/Social Wake Dropbox/${dropBoxFolder}/logs/testLog.txt`
+const chatLogPath=  `/Users/${yourUsername}/Social Wake Dropbox/${dropBoxFolder}/logs/chatLog.txt`
 
 
 var logger = fs.createWriteStream('liveChat.txt', {
