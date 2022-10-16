@@ -1,7 +1,12 @@
+
+//Change these parameters
+let monthNumber = 9;
+
+let chatGrabStart = getAppleTime(2022,7,31,0,0)   //dont worry about looking at chats before August 31 2022 ( months = 0-11, hours = 0-23)
+
+
 const imessage = require('osa-imessage')
 const fs = require('fs')
-
-
 const yourUsername = 'socialscrape';
 const dropBoxFolder = '_socialScrape'
 const completedPath =  `/Users/${yourUsername}/Social Wake Dropbox/${dropBoxFolder}/logs/masterCompletedLog.txt`
@@ -10,30 +15,11 @@ const missedLinkPath =  `/Users/${yourUsername}/Social Wake Dropbox/${dropBoxFol
 const missedLogPath =  `/Users/${yourUsername}/Social Wake Dropbox/${dropBoxFolder}/logs/missedLinksLog.txt`
 const logPath = `/Users/${yourUsername}/Social Wake Dropbox/${dropBoxFolder}/logs/chatLog.txt`
 const IGLogPath ='/Users/socialscrape/Social Wake Dropbox/_socialScrape/logs/IGLog.txt'
-
-
-const bonusLogPath = `/Users/${yourUsername}/Social Wake Dropbox/${dropBoxFolder}/logs/bonusReport.txt`
-const bonusCSVPath = `/Users/${yourUsername}/Social Wake Dropbox/${dropBoxFolder}/logs/bonusReport.csv`
-
-//const bonusCSVPath = `./bonusReport.csv`
-
-
-
-var bonusLogger = fs.createWriteStream(bonusLogPath, {
-    flags: 'a' // 'a' means appending (old data will be preserved)
-  })
-var writeBonusLog = (line) => bonusLogger.write(`\n${line}`);
-
-
-
-var bonusCSV = fs.createWriteStream(bonusCSVPath, {
-    flags: 'a' // 'a' means appending (old data will be preserved)
-  })
-var writeBonusCSV = (line) => bonusCSV.write(`\n${line}`);
-
+const DATE_OFFSET = 978307200
 const ttID = "'chat652293730519823796'"
 const igID = "'chat222048912579693603'"
 const otherID = "'chat951176133862785356'"
+
 
 const calendar = [
     {mnth:"Custom", wks:[]},
@@ -52,58 +38,32 @@ const calendar = [
 ]
 
 const weekRange = [
-    {wk:27, wkRng:"7/4-7/10"},
-    {wk:28, wkRng:"7/11-7/17"},
-    {wk:29, wkRng:"7/18-7/24"},
-    {wk:30, wkRng:"7/25-7/31"},
-    {wk:31, wkRng:"8/1-8/7"},
-    {wk:32, wkRng:"8/8-8/14"},
-    {wk:33, wkRng:"8/15-8/21"},
-    {wk:34, wkRng:"8/22-8/28"},
-    {wk:35, wkRng:"8/29-9/4"},
-    {wk:36, wkRng:"9/5-9/11"},
-    {wk:37, wkRng:"9/12-9/18"},
-    {wk:38, wkRng:"9/19-9/25"},
-    {wk:39, wkRng:"9/26-10/2"},
-    {wk:40, wkRng:"10/3-10/9"},
-    {wk:41, wkRng:"10/10-10/16"},
-    {wk:42, wkRng:"10/17-10/23"},
-    {wk:43, wkRng:"10/24-10/30"},
-    {wk:44, wkRng:"10/31-11/6"},
-    {wk:45, wkRng:"11/7-11/13"},
-    {wk:46, wkRng:"11/14-11/20"},
-    {wk:47, wkRng:"11/21-11/27"},
-    {wk:48, wkRng:"11/28-12/4"},
-    {wk:49, wkRng:"12/5-12/11"},
-    {wk:50, wkRng:"12/12-12/18"},
-    {wk:51, wkRng:"12/19-12/25"},
-    {wk:52, wkRng:"12/26-1/1"},
-    {wk:1, wkRng:"1/2-1/8"},
-    {wk:2, wkRng:"1/9-1/15"},
-    {wk:3, wkRng:"1/16-1/22"},
-    {wk:4, wkRng:"1/23-1/29"},
-    {wk:5, wkRng:"1/30-2/5"},
-    {wk:6, wkRng:"2/6-2/12"},
-    {wk:7, wkRng:"2/13-2/19"},
-    {wk:8, wkRng:"2/20-2/26"},
-    {wk:9, wkRng:"2/27-3/5"},
-    {wk:10, wkRng:"3/6-3/12"},
-    {wk:11, wkRng:"3/13-3/19"},
-    {wk:12, wkRng:"3/20-3/26"},
-    {wk:13, wkRng:"3/27-4/2"},
-    {wk:14, wkRng:"4/3-4/9"},
-    {wk:15, wkRng:"4/10-4/16"},
-    {wk:16, wkRng:"4/17-4/23"},
-    {wk:17, wkRng:"4/24-4/30"},
-    {wk:18, wkRng:"5/1-5/7"},
-    {wk:19, wkRng:"5/8-5/14"},
-    {wk:20, wkRng:"5/15-5/21"},
-    {wk:21, wkRng:"5/22-5/28"},
-    {wk:22, wkRng:"5/29-6/4"},
-    {wk:23, wkRng:"6/5-6/11"},
-    {wk:24, wkRng:"6/12-6/18"},
-    {wk:25, wkRng:"6/19-6/25"},
-    {wk:26, wkRng:"6/26-7/2"},
+    {wk:27, wkRng:"7/4-7/10"},{wk:28, wkRng:"7/11-7/17"},
+    {wk:29, wkRng:"7/18-7/24"},{wk:30, wkRng:"7/25-7/31"},
+    {wk:31, wkRng:"8/1-8/7"},{wk:32, wkRng:"8/8-8/14"},
+    {wk:33, wkRng:"8/15-8/21"},{wk:34, wkRng:"8/22-8/28"},
+    {wk:35, wkRng:"8/29-9/4"},{wk:36, wkRng:"9/5-9/11"},
+    {wk:37, wkRng:"9/12-9/18"},{wk:38, wkRng:"9/19-9/25"},
+    {wk:39, wkRng:"9/26-10/2"},{wk:40, wkRng:"10/3-10/9"},
+    {wk:41, wkRng:"10/10-10/16"},{wk:42, wkRng:"10/17-10/23"},
+    {wk:43, wkRng:"10/24-10/30"},{wk:44, wkRng:"10/31-11/6"},
+    {wk:45, wkRng:"11/7-11/13"},{wk:46, wkRng:"11/14-11/20"},
+    {wk:47, wkRng:"11/21-11/27"},{wk:48, wkRng:"11/28-12/4"},
+    {wk:49, wkRng:"12/5-12/11"},{wk:50, wkRng:"12/12-12/18"},
+    {wk:51, wkRng:"12/19-12/25"},{wk:52, wkRng:"12/26-1/1"},
+    {wk:1, wkRng:"1/2-1/8"},{wk:2, wkRng:"1/9-1/15"},
+    {wk:3, wkRng:"1/16-1/22"},{wk:4, wkRng:"1/23-1/29"},
+    {wk:5, wkRng:"1/30-2/5"},{wk:6, wkRng:"2/6-2/12"},
+    {wk:7, wkRng:"2/13-2/19"},{wk:8, wkRng:"2/20-2/26"},
+    {wk:9, wkRng:"2/27-3/5"},{wk:10, wkRng:"3/6-3/12"},
+    {wk:11, wkRng:"3/13-3/19"},{wk:12, wkRng:"3/20-3/26"},
+    {wk:13, wkRng:"3/27-4/2"},{wk:14, wkRng:"4/3-4/9"},
+    {wk:15, wkRng:"4/10-4/16"},{wk:16, wkRng:"4/17-4/23"},
+    {wk:17, wkRng:"4/24-4/30"},{wk:18, wkRng:"5/1-5/7"},
+    {wk:19, wkRng:"5/8-5/14"},{wk:20, wkRng:"5/15-5/21"},
+    {wk:21, wkRng:"5/22-5/28"},{wk:22, wkRng:"5/29-6/4"},
+    {wk:23, wkRng:"6/5-6/11"},{wk:24, wkRng:"6/12-6/18"},
+    {wk:25, wkRng:"6/19-6/25"},{wk:26, wkRng:"6/26-7/2"},
 ]
 
 const jakeWoodruff = {handle:'+19374087623', name:'Jake Woodruff'}
@@ -122,30 +82,41 @@ const salma = {handle:'+16148007185',name:'Salma Abdel Latif'}
 const kearstyn = {handle:'+15137487421',name:'Kearstyn Sage'}
 
 
-    //$4 per clip approval
-
+//$4 per clip approval
 //Daily Bonus
 //  $10 for 10 clips in 1 day
 //  $30 for 20 clips in 1 day
 //  $100 for 40 clips in 1 day
-
 //Weekly Bonus
 //  $50 for 50 clips in 1 week
 //  $125 for 100 clips in 1 day
 //  $250 for 150 clips in 1 day
 
-let monthNumber = 9;
+
 let currentMonth = calendar[monthNumber];
 let monthName = calendar[monthNumber].mnth
+
+const bonusLogPath = `/Users/${yourUsername}/Social Wake Dropbox/${dropBoxFolder}/logs/${monthName}bonusReport.txt`
+const bonusCSVPath = `/Users/${yourUsername}/Social Wake Dropbox/${dropBoxFolder}/logs/${monthName}bonusReport.csv`
 
 
 console.log(monthName)
 console.log("Herro")
 
+var bonusLogger = fs.createWriteStream(bonusLogPath, {
+    flags: 'a' // 'a' means appending (old data will be preserved)
+  })
+var writeBonusLog = (line) => bonusLogger.write(`\n${line}`);
+
+var bonusCSV = fs.createWriteStream(bonusCSVPath, {
+    flags: 'a' // 'a' means appending (old data will be preserved)
+  })
+var writeBonusCSV = (line) => bonusCSV.write(`\n${line}`);
+
 
 async function bonusCounting() {
 
-    let chats = await imessage.globalLog(1000) //get applicable chats (with links)
+    let chats = await imessage.globalLog(chatGrabStart) //get applicable chats (with links)
     console.log("Messages retrieved!")
     let clippers = [
          
@@ -469,8 +440,6 @@ function getDayNumber(date) {
 
 
 
-const DATE_OFFSET = 978307200
-
 // Gets the current Apple-style timestamp
 function appleTimeNow() {
     return Math.floor(Date.now() / 1000) - DATE_OFFSET
@@ -495,4 +464,12 @@ function fromAppleTime(ts) {
 // According to a StackOverflow user, timestamps now have nanosecond precision
 function unpackTime(ts) {
     return Math.floor(ts / Math.pow(10, 9))
+}
+
+function getAppleTime (y,m,d,h,mi){
+    const DATE_OFFSET = 978307200
+    let unixMS = Date.UTC(y,m,d,h,mi)
+    let ts = (unixMS - (DATE_OFFSET*1000))* 1000000
+
+    return ts
 }
