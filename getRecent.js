@@ -1,58 +1,21 @@
 const imessage = require('osa-imessage')
 const fs = require('fs')
-// const getRecentChats  = require('osa-imessage')
+const DATE_OFFSET = 978307200
+let chatGrabStart = getAppleTime(2022,7,31,0,0)   //dont worry about looking at chats before August 31 2022 ( months = 0-11, hours = 0-23)
+//console.log(chatGrabStart)
 
-
-// let liveChatLinks = [];
-
-// var logger = fs.createWriteStream('liveChat.txt', {
-//     flags: 'a' // 'a' means appending (old data will be preserved)
-//   })
-
-  // var linkScrape = fs.createWriteStream('chatLinks.txt', {
-  //   flags: 'a' // 'a' means appending (old data will be preserved)
-  // })
-  // var writeLink = (line) => linkScrape.write(`\n${line}`);
-
-// var writeLine = (line) => logger.write(`\n${line}`);
-
-
-
-// imessage.listen().on("message", (msg) => {
-//     console.log(msg)
-//     writeLine(msg.text);
-
-//     // if (msg.group.indexOf("chat901667219280557236") !== -1) {
-
-//         if (msg.text.indexOf("tiktok.com") !== -1) {
-//             writeLink(msg.text);
-
-//         }
-//     // }
-//   });
-
-
-
-
-
-    
-
-
-
-// imessage.listen().on("message", (msg) => {
-//     console.log(msg.text, '\n', msg.handle, '\n', msg.date)
-    
-//     fs.writeFile('./liveChat.txt', msg.text);
-//   });
 async function getRecent() {
 
-
-
-await imessage.getRecentChats(100) // Defaults to 10
+await imessage.getRecentChats(chatGrabStart) // Defaults to 10
 //  console.log(`${process.env.HOME}/Library/Messages/chat.db`)
-
-
-
 
 }
 getRecent();
+
+function getAppleTime (y,m,d,h,mi){
+
+    let unixMS = Date.UTC(y,m,d,h,mi)
+    let ts = (unixMS - (DATE_OFFSET*1000))* 1000000
+
+    return ts
+}
